@@ -38,19 +38,22 @@ RM = /usr/bin/cmake -E remove -f
 # Escaping for special characters.
 EQUALS = =
 
+# The program to use to edit the cache.
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
+
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dilawar/Work/GITHUB/simpletest
+CMAKE_SOURCE_DIR = /home/dilawar/LocalWork/GITHUB/simpletest
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dilawar/Work/GITHUB/simpletest
+CMAKE_BINARY_DIR = /home/dilawar/LocalWork/GITHUB/simpletest
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running interactive CMake command-line interface..."
-	/usr/bin/cmake -i .
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -69,9 +72,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dilawar/Work/GITHUB/simpletest/CMakeFiles /home/dilawar/Work/GITHUB/simpletest/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dilawar/LocalWork/GITHUB/simpletest/CMakeFiles /home/dilawar/LocalWork/GITHUB/simpletest/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dilawar/Work/GITHUB/simpletest/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dilawar/LocalWork/GITHUB/simpletest/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -99,41 +102,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named simpletest
+# Target rules for targets named SimpleTest
 
 # Build rule for target.
-simpletest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 simpletest
-.PHONY : simpletest
+SimpleTest: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 SimpleTest
+.PHONY : SimpleTest
 
 # fast build rule for target.
-simpletest/fast:
-	$(MAKE) -f CMakeFiles/simpletest.dir/build.make CMakeFiles/simpletest.dir/build
-.PHONY : simpletest/fast
-
-print_function.o: print_function.cc.o
-.PHONY : print_function.o
-
-# target to build an object file
-print_function.cc.o:
-	$(MAKE) -f CMakeFiles/simpletest.dir/build.make CMakeFiles/simpletest.dir/print_function.cc.o
-.PHONY : print_function.cc.o
-
-print_function.i: print_function.cc.i
-.PHONY : print_function.i
-
-# target to preprocess a source file
-print_function.cc.i:
-	$(MAKE) -f CMakeFiles/simpletest.dir/build.make CMakeFiles/simpletest.dir/print_function.cc.i
-.PHONY : print_function.cc.i
-
-print_function.s: print_function.cc.s
-.PHONY : print_function.s
-
-# target to generate assembly for a file
-print_function.cc.s:
-	$(MAKE) -f CMakeFiles/simpletest.dir/build.make CMakeFiles/simpletest.dir/print_function.cc.s
-.PHONY : print_function.cc.s
+SimpleTest/fast:
+	$(MAKE) -f CMakeFiles/SimpleTest.dir/build.make CMakeFiles/SimpleTest.dir/build
+.PHONY : SimpleTest/fast
 
 # Help Target
 help:
@@ -141,12 +120,9 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... SimpleTest"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... simpletest"
-	@echo "... print_function.o"
-	@echo "... print_function.i"
-	@echo "... print_function.s"
 .PHONY : help
 
 
