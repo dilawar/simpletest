@@ -27,12 +27,18 @@ int main()
      * is message to print on console in case of failture
      */
     EXPECT_TRUE( 1 == 2, "1 == 2 must fail");
+
+    /* TO instroduce colors into user-messages, sorround them with ` */
+    EXPECT_TRUE( 1 == 2, "`1 == 2 must fail`");
+
     EXPECT_FALSE( 2 != 2, "2 != 2 must also fail");
 
 
     /* Following macros takes three argument and they try to mimic GTEST macros. */
     EXPECT_EQ(2, 3, "This should fail");
-    EXPECT_NEQ(2, 2, "I was expecting not equal to 2");
+
+    /* This is colored. */
+    EXPECT_NEQ(2, 2, "`I was expecting not equal to 2`");
 
     int expected = 3;
     EXPECT_GTE(2, expected, "I was expecting greater than equal to" << expected );
@@ -47,5 +53,4 @@ int main()
     ASSERT_LT(3, expected, "I was expecting less than " << expected );
 
     return 0;
-
 }

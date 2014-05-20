@@ -164,14 +164,14 @@ void dump(string msg, string type, bool autoFormat)
     string color = T_GREEN;
     if(type == "WARNING" || type == "WARN" || type == "FIXME")
         color = T_YELLOW;
-    else if(type == "DEBUG" || type == "EXPECT_FAILURE" || type == "EXPECT")
+    else if(type == "DEBUG")
         color = T_CYAN;
-    else if(type == "ERROR" || type == "FAIL")
+    else if(type == "ERROR" || type == "FAIL" || type == "FATAL" || type == "ASSERT_FAILURE")
         color = T_RED;
-    else if(type == "INFO")
-        color = T_BLUE;
-    else if(type == "LOG")
+    else if(type == "INFO" | type == "EXPECT_FAILURE")
         color = T_MAGENTA;
+    else if(type == "LOG")
+        color = T_BLUE;
 
     for(unsigned int i = 0; i < msg.size(); ++i)
     {
@@ -222,7 +222,7 @@ void log(string msg, string type, bool redirectToConsole, bool removeTicks)
         remove_if(msg.begin(), msg.end(), isBackTick);
 
     fstream logF;
-    logF.open("__moose__.log", ios::app);
+    logF.open("__simple__.log", ios::app);
 
     time_t rawtime; time(&rawtime);
     struct tm* timeinfo;
