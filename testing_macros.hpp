@@ -46,7 +46,7 @@ class FatalTestFailure
         string msg;
 };
 
-ostringstream assertStream;
+static ostringstream assertStream;
 
 #define LOCATION(ss) \
     ss << "In function: " << SIMPLE_CURRENT_FUNCTION; \

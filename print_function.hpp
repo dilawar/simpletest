@@ -53,24 +53,6 @@
 using namespace std;
 
 
-string debugPrint(string msg, string prefix, string color = T_RESET
-        , unsigned indentLevel = 10);
-
-
-string colored(string msg);
-
-string colored(string msg, string colorName);
-
-/*  pretty print onto console using colors. */
-void dump(string msg, string type="WARNING", bool autoFormat=true);
-
-/*  log to a file and also write to console. */
-void log(string msg, string type, bool redirectToConsole=true
-        , bool removeTicks=true);
-
-/* Check if a given character is a backtick ` */
-bool isBackTick(char a);
-
 /* 
  * ===  FUNCTION  ==============================================================
  *         Name:  mapToString
@@ -80,8 +62,8 @@ bool isBackTick(char a);
  *  is true.
  * ==============================================================================
  */
-    template<typename A, typename B>
-string mapToString(const map<A, B>& m, bool value=true)
+template<typename A, typename B>
+inline string mapToString(const map<A, B>& m, bool value=true)
 {
     unsigned int width = 80;
     unsigned int mapSize = m.size();
@@ -126,21 +108,25 @@ string mapToString(const map<A, B>& m, bool value=true)
 #include <ctime>
 #include <algorithm>
 
-string colored(string msg)
+inline string colored(string msg)
 {
     stringstream ss;
     ss << T_RED << msg << T_RESET;
     return ss.str();
 }
 
-string colored(string msg, string colorName)
+inline string colored(string msg, string colorName)
 {
     stringstream ss;
     ss << colorName << msg << T_RESET;
     return ss.str();
 }
 
-string debugPrint(string msg, string prefix, string color, unsigned debugLevel) 
+inline string debugPrint(string msg
+        , string prefix="DEBUG"
+        , string color=T_RESET
+        , unsigned debugLevel = 0
+        ) 
 {
     stringstream ss; ss.str("");
     if(debugLevel <= DEBUG_LEVEL)
@@ -155,7 +141,7 @@ string debugPrint(string msg, string prefix, string color, unsigned debugLevel)
  *  This function dumps a message onto console. Fills appropriate colors as
  *  needed. What can I do, I love colors.
  *-----------------------------------------------------------------------------*/
-void dump(string msg, string type, bool autoFormat)
+inline void dump(string msg, string type = "DEBUG", bool autoFormat=false)
 {
     stringstream ss;
     ss << "[" << type << "] ";
@@ -205,14 +191,17 @@ void dump(string msg, string type, bool autoFormat)
 /*-----------------------------------------------------------------------------
  *  Log to a file, and also to console.
  *-----------------------------------------------------------------------------*/
-bool isBackTick(char a)
+inline bool isBackTick(char a)
 {
     if('`' == a)
         return true;
     return false;
 }
 
-void log(string msg, string type, bool redirectToConsole, bool removeTicks)
+inline void log(string msg, string type="DEBUG"
+        , bool redirectToConsole = true
+        , bool removeTicks=true
+        )
 {
     if(redirectToConsole)
         dump(msg, type, true);
