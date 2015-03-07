@@ -50,6 +50,7 @@
 #define T_BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define T_BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
+
 using namespace std;
 
 
@@ -137,11 +138,11 @@ inline string debugPrint(string msg
     return ss.str();
 }
 
-/*-----------------------------------------------------------------------------
+/*
  *  This function dumps a message onto console. Fills appropriate colors as
  *  needed. What can I do, I love colors.
  *-----------------------------------------------------------------------------*/
-inline void dump(string msg, string type = "DEBUG", bool autoFormat=false)
+inline void log2term(string msg, string type = "DEBUG", bool autoFormat=false)
 {
     stringstream ss;
     ss << "[" << type << "] ";
@@ -154,7 +155,7 @@ inline void dump(string msg, string type = "DEBUG", bool autoFormat=false)
         color = T_CYAN;
     else if(type == "ERROR" || type == "FAIL" || type == "FATAL" || type == "ASSERT_FAILURE")
         color = T_RED;
-    else if(type == "INFO" | type == "EXPECT_FAILURE")
+    else if(type == "INFO" || type == "EXPECT_FAILURE")
         color = T_MAGENTA;
     else if(type == "LOG")
         color = T_BLUE;
@@ -204,7 +205,7 @@ inline void log(string msg, string type="DEBUG"
         )
 {
     if(redirectToConsole)
-        dump(msg, type, true);
+        log2term(msg, type, true);
 
     /* remove any backtick from the string. */
     if(removeTicks)
@@ -222,5 +223,9 @@ inline void log(string msg, string type="DEBUG"
     logF.close();
 }
 
+#define LOG(type, msg) \
+    stringstream ss; \
+    ss << msg; \
+    log2term(ss.str(), type); 
 
 #endif   /* ----- #ifndef print_function_INC  ----- */
