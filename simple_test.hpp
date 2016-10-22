@@ -10,7 +10,7 @@
  *       Revision:  none
  *       Compiler:  gcc
  *
- *         Author:  Dilawar Singh (), dilawar@ee.iitb.ac.in
+ *         Author:  Dilawar Singh (), dilawars@ncbs.res.in
  *   Organization:  
  *
  * ==============================================================================
@@ -21,5 +21,6 @@
 
 #include "print_function.hpp"
 #include "testing_macros.hpp"
+#include "simple_assert.hpp"
 
 #endif   /* ----- #ifndef SIMPLETEST_INC  ----- */

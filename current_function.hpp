@@ -22,9 +22,9 @@
 //  http://www.boost.org/libs/utility/current_function.html
 //
 // LOG: Orginal from boost libraries.
-// Modified by Dilawar Singh. It's part of moose now.
+// Modified by Dilawar Singh. It's part of simpletest now.
 
-namespace moose
+namespace simpletest
 {
 
 namespace detail
@@ -67,7 +67,7 @@ inline void current_function_helper()
 
 } // namespace detail
 
-} // namespace moose
+} // namespace simpletest
 
 #endif // #ifndef SIMPLE_CURRENT_FUNCTION_HPP_INCLUDED
 

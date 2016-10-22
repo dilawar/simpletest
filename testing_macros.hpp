@@ -1,5 +1,4 @@
-/*
- * ==============================================================================
+ /* ==============================================================================
  *
  *       Filename:  testing_macros.hpp
  *
@@ -10,7 +9,7 @@
  *       Revision:  none
  *       Compiler:  gcc
  *
- *         Author:  Dilawar Singh (), dilawar@ee.iitb.ac.in
+ *         Author:  Dilawar Singh (), dilawars@ncbs.res.in
  *   Organization:  
  *
  * ==============================================================================
@@ -21,30 +20,21 @@
 
 
 #include <sstream>
-#include <iostream>
 #include <exception>
+#include <iostream>
+#include <stdexcept>
+#include <limits>
+#include <cmath>
+
 #include "current_function.hpp"
 #include "print_function.hpp"
 
 using namespace std;
 
-class FatalTestFailure 
+inline bool doubleEq(double a, double b)
 {
-    public:
-        FatalTestFailure()
-        {
-            msg = string("");
-        }
-
-        FatalTestFailure(string msg)
-        {
-            msg = msg;
-            dump( msg, "ASSERTION_FAILURE");
-        }
-
-    public:
-        string msg;
-};
+    return std::fabs(a-b) < 1e-7;
+}
 
 static ostringstream assertStream;
 
@@ -55,24 +45,26 @@ static ostringstream assertStream;
 #define EXPECT_TRUE( condition, msg) \
     if( !(condition) ) {\
         assertStream.str(""); \
+        LOCATION( assertStream ); \
         assertStream << msg << endl; \
-        dump(assertStream.str(), "EXPECT_FAILURE"); \
+        simpletest::__dump__(assertStream.str(), simpletest::failed);\
     }
 
 #define EXPECT_FALSE( condition, msg) \
     if( (condition) ) {\
         assertStream.str(""); \
+        LOCATION( assertStream ); \
         assertStream << msg << endl; \
-        dump(assertStream.str(), "EXPECT_FAILURE"); \
+        simpletest::__dump__(assertStream.str(), simpletest::failed); \
     }
 
 #define EXPECT_EQ(a, b, token)  \
     if( (a) != (b)) { \
         assertStream.str(""); \
         LOCATION(assertStream) \
-        assertStream << "Expected " << a << ", received " << b  << endl; \
-        assertStream << token << endl; \
-        dump(assertStream.str(), "EXPECT_FAILURE"); \
+        assertStream << "Expected " << b << ", received " << a ; \
+        assertStream << token; \
+        simpletest::__dump__(assertStream.str(), simpletest::failed); \
     }
 
 #define EXPECT_NEQ(a, b, token)  \
@@ -81,7 +73,7 @@ static ostringstream assertStream;
         LOCATION(assertStream); \
         assertStream << "Not expected " << a << endl; \
         assertStream << token << endl; \
-        dump(assertStream.str(), "EXPECT_FAILURE"); \
+        simpletest::__dump__(assertStream.str(), simpletest::failed); \
     }
 
 #define EXPECT_GT(a, b, token)  \
@@ -90,7 +82,7 @@ static ostringstream assertStream;
         LOCATION(assertStream); \
         assertStream << "Expected greater than " << a << ", received " << b << endl; \
         assertStream << token << endl; \
-        dump(assertStream.str(), "EXPECT_FAILURE"); \
+        simpletest::__dump__(assertStream.str(), simpletest::failed); \
     }
 
 #define EXPECT_GTE(a, b, token)  \
@@ -100,7 +92,7 @@ static ostringstream assertStream;
         assertStream << "Expected greater than or equal to " << a  \
             << ", received " << b << endl; \
         assertStream << token << endl; \
-        dump(assertStream.str(), "EXPECT_FAILURE"); \
+        simpletest::__dump__(assertStream.str(), simpletest::failed); \
     }
 
 #define EXPECT_LT(a, b, token)  \
@@ -109,7 +101,7 @@ static ostringstream assertStream;
         LOCATION(assertStream); \
         assertStream << "Expected less than " << a << ", received " << b << endl; \
         assertStream << token << endl; \
-        dump(assertStream.str(), "EXPECT_FAILURE"); \
+        simpletest::__dump__(assertStream.str(), simpletest::failed); \
     }
 
 #define EXPECT_LTE(a, b, token)  \
@@ -119,27 +111,59 @@ static ostringstream assertStream;
         assertStream << "Expected less than or equal to " << a \
             << ", received " << b << endl; \
         assertStream << token << endl; \
-        dump(assertStream.str(), "EXPECT_FAILURE"); \
+        simpletest::__dump__(assertStream.str(), simpletest::failed); \
     }
 
 #define ASSERT_TRUE( condition, msg) \
     if( !(condition) ) {\
         assertStream.str(""); \
-        assertStream << msg << endl; \
-        throw FatalTestFailure(assertStream.str());  \
+        assertStream << msg << endl;  \
+        throw std::runtime_error( assertStream.str() );\
     }
 
 #define ASSERT_FALSE( condition, msg) \
     if( (condition) ) {\
         assertStream.str(""); \
+        assertStream.precision( 9 ); \
         assertStream << msg << endl; \
-        throw FatalTestFailure(assertStream.str()); \
+        throw std::runtime_error(assertStream.str()); \
     }
 
 #define ASSERT_LT( a, b, msg) \
     EXPECT_LT(a, b, msg); \
     assertStream.str(""); \
+    assertStream.precision( 9 ); \
     assertStream << msg; \
-    throw FatalTestFailure( assertStream.str() ); \
+    throw std::runtime_error( assertStream.str() ); \
+
+#define ASSERT_EQ(a, b, token)  \
+    if( ! doubleEq((a), (b)) ) { \
+        assertStream.str(""); \
+        assertStream.precision( 9 ); \
+        LOCATION(assertStream) \
+        assertStream << "Expected " << a << ", received " << b  << endl; \
+        assertStream << token << endl; \
+        throw std::runtime_error(assertStream.str()); \
+    }
+
+#define ASSERT_DOUBLE_EQ(token, a, b)  \
+    if(! doubleEq(a, b) ) { \
+        assertStream.str(""); \
+        LOCATION(assertStream); \
+        assertStream << "Expected " << b << ", received " << a  << endl; \
+        assertStream << token; \
+        simpletest::__dump__(assertStream.str(), simpletest::failed); \
+        throw std::runtime_error( "float equality test simpletest::failed" ); \
+    }
+
+#define ASSERT_NEQ(a, b, token)  \
+    if( (a) == (b)) { \
+        assertStream.str(""); \
+        LOCATION(assertStream); \
+        assertStream << "Not expected " << a << endl; \
+        assertStream << token << endl; \
+        throw std::runtime_error(assertStream.str()); \
+    }
+
 
 #endif   /* ----- #ifndef TESTING_MACROS_INC  ----- */

@@ -1,6 +1,37 @@
-/* This file is a modified version of boost/assert.hpp file. I guess I have to
- * release it under the same license
- */
+//  simpletest/assert.hpp - SIMPLE_ASSERT(expr)
+//                     SIMPLE_ASSERT_MSG(expr, msg)
+//                     SIMPLE_VERIFY(expr)
+//
+//  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2007 Peter Dimov
+//  Copyright (c) Beman Dawes 2011
+//  Copyright (c) Dilawar Singh 2013
+//
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+//  Note: There are no include guards. This is intentional.
+//
+//  See http://www.simpletest.org/libs/utility/assert.html for documentation.
+//
+
+//
+// Stop inspect complaining about use of 'assert':
+//
+// simpletestinspect:naassert_macro
+//
+// Log: 
+// Thursday 01 May 2014 01:18:02 PM IST
+//
+// This files is a modified version of boost/assert.hpp file. The names of
+// macros have been changed.
+//
+
+//--------------------------------------------------------------------------------------//
+//                                     SIMPLE_ASSERT                                     //
+//--------------------------------------------------------------------------------------//
+
 #undef SIMPLE_ASSERT
 
 #if defined(SIMPLE_DISABLE_ASSERTS)
@@ -12,15 +43,15 @@
 #include "current_function.hpp"
 #include <stringstream>
 
-namespace moose
+namespace simpletest
 {
   void assertion_failed(char const * expr,
                         char const * function, char const * file, long line); // user defined
-} // namespace moose
+} // namespace simpletest
 
 #define SIMPLE_ASSERT(expr) ((expr) \
   ? ((void)0) \
-  : ::moose::assertion_failed(#expr, SIMPLE_CURRENT_FUNCTION, __FILE__, __LINE__))
+  : ::simpletest::assertion_failed(#expr, SIMPLE_CURRENT_FUNCTION, __FILE__, __LINE__))
 
 #else
 # include <assert.h> // .h to support old libraries w/o <cassert> - effect is the same
@@ -41,15 +72,15 @@ namespace moose
 
   #include "current_function.hpp"
 
-  namespace moose
+  namespace simpletest
   {
     void assertion_failed_msg(char const * expr, char const * msg,
                               char const * function, char const * file, long line); // user defined
-  } // namespace moose
+  } // namespace simpletest
 
   #define SIMPLE_ASSERT_MSG(expr, msg) ((expr) \
     ? ((void)0) \
-    : ::moose::assertion_failed_msg(#expr, msg, SIMPLE_CURRENT_FUNCTION, __FILE__, __LINE__))
+    : ::simpletest::assertion_failed_msg(#expr, msg, SIMPLE_CURRENT_FUNCTION, __FILE__, __LINE__))
 
 #else
   #ifndef SIMPLE_ASSERT_HPP
@@ -64,7 +95,7 @@ namespace moose
     # define SIMPLE_ASSERT_MSG_OSTREAM std::cerr
     #endif
 
-    namespace moose
+    namespace simpletest
     { 
       namespace assertion 
       { 
@@ -91,7 +122,7 @@ namespace moose
 
   #define SIMPLE_ASSERT_MSG(expr, msg) ((expr) \
     ? ((void)0) \
-    : ::moose::assertion::detail::assertion_failed_msg(#expr, msg, \
+    : ::simpletest::assertion::detail::assertion_failed_msg(#expr, msg, \
           SIMPLE_CURRENT_FUNCTION, __FILE__, __LINE__))
 #endif
 
@@ -101,13 +132,13 @@ namespace moose
 
 #undef SIMPLE_VERIFY
 
-#if defined(SIMPLE_DISABLE_ASSERTS) || ( !defined(SIMPLE_ENABLE_ASSERT_HANDLER) && defined(NDEBUG) )
+#if defined(SIMPLE_DISABLE_ASSERTS) || ( !defined(MOOSE_ENABLE_ASSERT_HANDLER) && defined(NDEBUG) )
 
 # define SIMPLE_VERIFY(expr) ((void)(expr))
 
 #else
 
-# define SIMPLE_VERIFY(expr) SIMPLE_ASSERT(expr)
+# define SIMPLE_VERIFY(expr) MOOSE_ASSERT(expr)
 
 /*-----------------------------------------------------------------------------
  *                                  SIMPLE_WARN
