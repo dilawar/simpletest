@@ -16,7 +16,7 @@
  * ==============================================================================
  */
 
-#include "../simple_test.hpp"
+#include "../simpletest.hpp"
 
 #include <iostream>
 using namespace std;
