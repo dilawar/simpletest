@@ -155,7 +155,7 @@ namespace simpletest {
     inline void __dump__(string msg, serverity_level_ type = debug, bool autoFormat = true)
     {
         stringstream ss;
-        ss << "[" << levels_[type] << "] ";
+        ss << setw(8) << levels_[type] << ": ";
         bool set = false;
         bool reset = true;
         string color = T_GREEN;
@@ -226,7 +226,11 @@ namespace simpletest {
 #ifdef  NDEBUG
 #define LOG(a, t ) ((void)0);
 #else      /* -----  not NDEBUG  ----- */
-#define LOG(t, a) { stringstream __ss__;  __ss__ << a; simpletest::__dump__(__ss__.str(), t ); } 
+#define LOG(t, a) { \
+    stringstream __ss__; \
+    __ss__ << a; \
+    simpletest::__dump__(__ss__.str(), t ); \
+} 
 #endif     /* -----  not NDEBUG  ----- */
 
     /*-----------------------------------------------------------------------------
